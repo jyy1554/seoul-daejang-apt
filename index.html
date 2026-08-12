@@ -15,11 +15,14 @@
 
     /* ══ 시작 화면 ══ */
     #s-start{justify-content:center;text-align:center;padding:2rem;background:transparent;}
-    .giphy-bg{position:fixed;inset:0;z-index:0;overflow:hidden;display:flex;align-items:stretch;}
+    .giphy-bg{position:fixed;inset:0;z-index:0;overflow:hidden;}
     .giphy-bg::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.62);}
     .giphy-bg iframe{
-      height:100%;width:calc(100vh * 343 / 480);
-      flex-shrink:0;border:0;pointer-events:none;
+      position:absolute;top:50%;left:50%;
+      height:100dvh;width:calc(100dvh * 343 / 480);
+      min-width:100%;
+      transform:translate(-50%,-50%);
+      border:0;pointer-events:none;
     }
     .start-eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:1.2rem;}
     #s-start h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:900;line-height:1.15;margin-bottom:.6rem;}
