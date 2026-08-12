@@ -1,0 +1,27 @@
+name: Deploy to playatgame.com/seoul-apt
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to at-game_seoul gh-pages
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git clone https://jyy1554:${GH_TOKEN}@github.com/jyy1554/at-game_seoul.git target
+          cd target
+          git checkout gh-pages
+          mkdir -p seoul-apt
+          cp ../index.html seoul-apt/index.html
+          git add seoul-apt/index.html
+          git diff --staged --quiet || git commit -m "Update seoul-apt quiz"
+          git push

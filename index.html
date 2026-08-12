@@ -26,11 +26,13 @@
     #s-start h1 .hl{color:var(--gold);}
     .start-sub{font-size:1rem;color:#999;line-height:1.7;margin-bottom:2.5rem;}
     .start-sub strong{color:#fff;}
-    .btn-gold{background:var(--gold);color:#000;border:none;border-radius:50px;padding:1rem 3rem;font-size:1.05rem;font-weight:800;cursor:pointer;box-shadow:0 0 30px rgba(255,215,0,.3);transition:transform .15s,box-shadow .15s;}
-    .btn-gold:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(255,215,0,.5);}
-    .start-stats{margin-top:2.5rem;display:flex;gap:2.5rem;justify-content:center;}
-    .stat-n{font-size:1.6rem;font-weight:900;color:var(--gold);}
-    .stat-l{font-size:.7rem;color:#666;margin-top:2px;}
+    @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 30px rgba(255,215,0,.3);}50%{transform:scale(1.06);box-shadow:0 0 50px rgba(255,215,0,.6);}}
+    .btn-gold{background:var(--gold);color:#000;border:none;border-radius:50px;padding:1rem 3rem;font-size:1.05rem;font-weight:800;cursor:pointer;box-shadow:0 0 30px rgba(255,215,0,.3);animation:pulse 2s ease-in-out infinite;}
+    .btn-gold:hover{animation:none;transform:translateY(-3px);box-shadow:0 0 50px rgba(255,215,0,.5);}
+    .q-slider-wrap{margin-top:2rem;width:100%;max-width:280px;}
+    .q-slider-label{font-size:2rem;font-weight:900;color:var(--gold);text-align:center;margin-bottom:.5rem;}
+    .q-slider-wrap input[type=range]{width:100%;accent-color:var(--gold);height:4px;cursor:pointer;}
+    .q-slider-ends{display:flex;justify-content:space-between;font-size:.75rem;color:#666;margin-top:.3rem;}
 
     /* ══ 퀴즈 화면 ══ */
     #s-quiz{padding:.5rem 1rem .8rem;max-width:520px;width:100%;margin:0 auto;
@@ -106,7 +108,7 @@
     @media(max-width:480px){
       .apt-img-wrap{height:160px;}
       .apt-name{font-size:1.25rem;}
-      .seoul-svg .labels{font-size:10px;}
+      .seoul-svg .labels{font-size:16px;}
     }
     /* ══ 데스크탑: 퀴즈 확대 ══ */
     @media(min-width:768px){
@@ -133,14 +135,13 @@
   <p class="start-sub">
     대장아파트 사진을 보고<br>
     서울 지도에서 해당 구를 직접 클릭하세요.<br>
-    <strong>진짜 부동산 고수만 15/15!</strong>
   </p>
-  <button class="btn-gold" onclick="startGame()">지식 대결 시작 🏆</button>
-  <div class="start-stats">
-    <div><div class="stat-n">40</div><div class="stat-l">대장아파트</div></div>
-    <div><div class="stat-n">15</div><div class="stat-l">랜덤 출제</div></div>
-    <div><div class="stat-n">지도</div><div class="stat-l">클릭 방식</div></div>
+  <div class="q-slider-wrap">
+    <div class="q-slider-label"><span id="q-count">10</span>문제</div>
+    <input type="range" id="q-slider" min="0" max="20" value="10" step="1" oninput="if(+this.value<1)this.value=1;document.getElementById('q-count').textContent=this.value">
+    <div class="q-slider-ends"><span>0</span><span>20</span></div>
   </div>
+  <button class="btn-gold" onclick="startGame()">지식 대결 시작 🏆</button>
 </div>
 
 <!-- ══ 퀴즈 화면 ══ -->
@@ -287,9 +288,24 @@ const APTS = [
   {name:"여의도동 시범",                gu:"영등포구", units:1584,  year:1971, highlight:"여의도 랜드마크"},
   {name:"응암동 녹번역e편한세상캐슬",    gu:"은평구",  units:2569,  year:2021, highlight:"은평 신축 대장"},
   {name:"미아동 SK북한산시티",          gu:"강북구",  units:3830,  year:2004, highlight:"강북 최대 단지"},
+  {name:"한남동 한남더힐",              gu:"용산구",  units:600,   year:2011, highlight:"한국 최고가 아파트 대명사"},
+  {name:"한남동 나인원한남",            gu:"용산구",  units:341,   year:2019, highlight:"한강뷰 초고급 주거"},
+  {name:"개포동 래미안블레스티지",       gu:"강남구",  units:1957,  year:2019, highlight:"개포주공1단지 재건축"},
+  {name:"개포동 디에이치아너힐즈",       gu:"강남구",  units:1320,  year:2019, highlight:"개포주공4단지 재건축"},
+  {name:"잠원동 신반포메이플자이",       gu:"서초구",  units:3307,  year:2020, highlight:"신반포 재건축 대단지"},
+  {name:"반포동 디에이치클래스트",       gu:"서초구",  units:5002,  year:2024, highlight:"신반포 역대 최대 재건축"},
+  {name:"방배동 래미안원페를라",         gu:"서초구",  units:1097,  year:2024, highlight:"방배 6구역 재건축 신축"},
+  {name:"잠실동 잠실트리지움",          gu:"송파구",  units:2696,  year:2008, highlight:"잠실 4대 단지"},
+  {name:"잠실동 잠실주공5단지",         gu:"송파구",  units:3930,  year:1978, highlight:"잠실 재건축 핵심 대장"},
+  {name:"고덕동 래미안힐스테이트",       gu:"강동구",  units:4066,  year:2016, highlight:"고덕 재건축 선도 단지"},
+  {name:"자양동 더샵스타시티",          gu:"광진구",  units:2678,  year:2003, highlight:"광진구 최고가 랜드마크"},
+  {name:"염리동 마포프레스티지자이",     gu:"마포구",  units:3885,  year:2015, highlight:"마포 최대 브랜드 단지"},
+  {name:"목동 목동신시가지1단지",        gu:"양천구",  units:640,   year:1986, highlight:"목동 재건축 선도 단지"},
+  {name:"목동 목동신시가지14단지",       gu:"양천구",  units:2300,  year:1988, highlight:"목동 최대 규모 단지"},
+  {name:"여의도동 브라이튼여의도",       gu:"영등포구", units:879,  year:2024, highlight:"여의도 최신 랜드마크"},
 ];
 
-const TOTAL=15;
+let TOTAL=10;
 let qs=[],cur=0,score=0,log=[],answered=false;
 
 const shuffle = a=>[...a].sort(()=>Math.random()-.5);
@@ -343,6 +359,7 @@ function setImage(name){
 
 // ── 게임 흐름 ──────────────────────────────────────────
 function startGame(){
+  TOTAL=Math.max(1,parseInt(document.getElementById('q-slider').value));
   qs=shuffle(APTS).slice(0,TOTAL);
   cur=0;score=0;log=[];
   show('s-quiz');
@@ -432,10 +449,10 @@ function showResult(){
   document.getElementById('prog').style.width='100%';
   const correct=log.filter(r=>r.ok).length;
   let grade,title,msg;
-  if(correct===15){grade='S';title='완벽한 서울 부동산 고수!';msg='15문제 전부 정답! 진짜 전문가급 👑';}
-  else if(correct>=12){grade='A';title='거의 다 맞췄어요!';msg='12개 이상 정답! 강남 3구 뿐 아니라 다른 지역도 잘 아는 분이에요.';}
-  else if(correct>=9){grade='B';title='절반 이상 맞췄어요!';msg='강남은 완벽한데 다른 지역이 조금 헷갈리나요?';}
-  else if(correct>=6){grade='C';title='더 공부가 필요해요!';msg='서울 곳곳의 대장아파트를 더 알아보세요.';}
+  if(correct===TOTAL){grade='S';title='완벽한 서울 부동산 고수!';msg=`${TOTAL}문제 전부 정답! 진짜 전문가급 👑`;}
+  else if(correct>=Math.round(TOTAL*0.8)){grade='A';title='거의 다 맞췄어요!';msg='강남 3구 뿐 아니라 다른 지역도 잘 아는 분이에요.';}
+  else if(correct>=Math.round(TOTAL*0.6)){grade='B';title='절반 이상 맞췄어요!';msg='강남은 완벽한데 다른 지역이 조금 헷갈리나요?';}
+  else if(correct>=Math.round(TOTAL*0.4)){grade='C';title='더 공부가 필요해요!';msg='서울 곳곳의 대장아파트를 더 알아보세요.';}
   else{grade='D';title='다시 도전해보세요!';msg='힌트를 잘 보면 맞출 수 있어요!';}
   document.getElementById('r-grade').textContent=grade;
   document.getElementById('r-pts').textContent=score;
