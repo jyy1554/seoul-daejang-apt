@@ -126,7 +126,7 @@
 @media(max-width:767px){#ad-desktop{display:none!important;}}
 @media(min-width:768px){#ad-mobile{display:none!important;}}
 </style>
-<div id="ad-wrap" style="position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;justify-content:center;background:#000;height:0;overflow:hidden;">
+<div id="ad-wrap" style="position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;justify-content:center;height:0;overflow:hidden;">
   <ins class="kakao_ad_area" id="ad-mobile" style="display:none;"
     data-ad-unit="DAN-GaBOSuEXe1j3Ty4s"
     data-ad-width="320"
@@ -145,7 +145,7 @@
       if(ins.style.display&&ins.style.display!=='none'){
         var h=parseInt(ins.dataset.adHeight);
         wrap.style.height=h+'px';
-        document.querySelectorAll('.screen').forEach(function(s){s.style.paddingTop=(h+4)+'px';});
+        document.querySelectorAll('.screen').forEach(function(s){s.style.paddingTop=h+'px';});
         ob.disconnect();
       }
     }).observe(ins,{attributes:true,attributeFilter:['style']});
