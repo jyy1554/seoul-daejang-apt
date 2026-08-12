@@ -23,6 +23,15 @@
       min-width:100%;
       transform:translate(-50%,-50%);
       border:0;pointer-events:none;
+      display:none;
+    }
+    .giphy-bg iframe:first-child{display:block;}
+    @media(min-width:768px){
+      .giphy-bg{display:flex;flex-direction:row;align-items:stretch;}
+      .giphy-bg iframe{
+        position:static;height:100dvh;width:calc(100dvh * 343 / 480);
+        min-width:0;transform:none;flex-shrink:0;display:block;
+      }
     }
     .start-eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:1.2rem;}
     #s-start h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:900;line-height:1.15;margin-bottom:.6rem;}
