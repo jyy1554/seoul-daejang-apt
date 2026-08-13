@@ -273,7 +273,7 @@
 <!-- ══ 결과 화면 ══ -->
 <div id="s-result" class="screen">
   <div class="grade" id="r-grade">A</div>
-  <div class="grade-sub">총 점수 <b id="r-pts">0</b>점 &nbsp;|&nbsp; <b id="r-correct">0</b>/15 정답</div>
+  <div class="grade-sub">총 점수 <b id="r-pts">0</b>점 &nbsp;|&nbsp; <b id="r-correct">0</b>/<span id="r-total">10</span> 정답</div>
   <h2 id="r-title"></h2>
   <p id="r-msg"></p>
   <div class="result-btns">
@@ -500,6 +500,7 @@ function showResult(){
   document.getElementById('r-grade').textContent=grade;
   document.getElementById('r-pts').textContent=score;
   document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-total').textContent=TOTAL;
   document.getElementById('r-title').textContent=title;
   document.getElementById('r-msg').textContent=msg;
   document.getElementById('log-list').innerHTML=log.map(r=>
@@ -510,7 +511,7 @@ function showResult(){
 
 function shareResult(){
   const correct=log.filter(r=>r.ok).length;
-  const text=`서울 대장아파트 지식테스트\n${correct}/10 정답 · 총 ${score}점\n🏠 나도 해봐! → playatgame.com`;
+  const text=`서울 대장아파트 지식테스트\n${correct}/${TOTAL} 정답 · 총 ${score}점\n🏠 나도 해봐! → playatgame.com`;
   navigator.clipboard.writeText(text)
     .then(()=>alert('결과가 복사됐어요! SNS에 붙여넣기 해보세요.'))
     .catch(()=>alert(text));
