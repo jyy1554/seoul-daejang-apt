@@ -39,6 +39,7 @@
     .start-sub{font-size:1rem;color:#999;line-height:1.7;margin-bottom:2.5rem;}
     .credit{margin-top:1.8rem;font-size:.75rem;color:#555;letter-spacing:.05em;}
     .info-wrap{position:fixed;top:1rem;right:1rem;z-index:10000;}
+    @media(min-width:768px) and (max-width:1023px){.info-wrap{right:max(4vw,1rem);}}
     .btn-info{background:none;border:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:.35;}
     .btn-info:hover{opacity:.8;}
     .btn-info svg{width:28px;height:28px;}
@@ -60,7 +61,7 @@
     #s-quiz{padding:.5rem 1rem .8rem;max-width:520px;width:100%;margin:0 auto;
             min-height:0;height:100dvh;overflow:hidden;}
 
-    .hud{display:flex;align-items:center;gap:.8rem;width:100%;margin-bottom:.5rem;}
+    .hud{display:flex;align-items:center;gap:.8rem;width:100%;margin-top:1rem;margin-bottom:.5rem;}
     .btn-home{background:none;border:none;padding:.2rem .3rem;cursor:pointer;line-height:0;flex-shrink:0;display:flex;align-items:center;justify-content:center;opacity:.75;}
     .btn-home:hover{opacity:1;}
     .hud-score{font-size:.8rem;font-weight:700;color:var(--gold);min-width:80px;}
@@ -68,7 +69,7 @@
     .prog-wrap{flex:1;height:4px;background:#222;border-radius:10px;overflow:hidden;}
     .prog-fill{height:100%;background:var(--gold);border-radius:10px;transition:width .5s ease;}
     .hud-qnum{font-size:.8rem;color:#fff;min-width:36px;text-align:right;}
-    .combo-bar{height:1.3rem;width:100%;text-align:center;font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:.3rem;letter-spacing:.04em;}
+    .combo-bar{height:1.3rem;width:100%;text-align:center;font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:1rem;letter-spacing:.04em;}
 
     /* 아파트 카드 */
     .apt-card{width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--border);margin-bottom:.9rem;}
@@ -154,8 +155,8 @@
 </div>
 
 <style>
-@media(max-width:767px){#ad-desktop{display:none!important;}}
-@media(min-width:768px){#ad-mobile{display:none!important;}}
+@media(max-width:1023px){#ad-desktop{display:none!important;}}
+@media(min-width:1024px){#ad-mobile{display:none!important;}}
 </style>
 <div id="ad-wrap" style="position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;justify-content:center;height:0;overflow:hidden;">
   <ins class="kakao_ad_area" id="ad-mobile" style="display:none;"
@@ -171,16 +172,33 @@
 <script>
 (function(){
   var wrap=document.getElementById('ad-wrap');
-  document.querySelectorAll('.kakao_ad_area').forEach(function(ins){
-    new MutationObserver(function(m,ob){
-      if(ins.style.display&&ins.style.display!=='none'){
-        var h=parseInt(ins.dataset.adHeight);
-        wrap.style.height=h+'px';
-        document.querySelectorAll('.screen').forEach(function(s){s.style.paddingTop=h+'px';});
-        var infoWrap=document.querySelector('.info-wrap');
-        if(infoWrap) infoWrap.style.top=(h+8)+'px';
-        ob.disconnect();
+  function applyAdHeight(){
+    var activeIns=null;
+    document.querySelectorAll('.kakao_ad_area').forEach(function(ins){
+      if(ins.style.display&&ins.style.display!=='none'&&getComputedStyle(ins).display!=='none'){
+        activeIns=ins;
       }
+    });
+    if(!activeIns) return;
+    var h=parseInt(activeIns.dataset.adHeight);
+    wrap.style.height=h+'px';
+    document.querySelectorAll('.screen').forEach(function(s){s.style.paddingTop=h+'px';});
+    var infoWrap=document.querySelector('.info-wrap');
+    var gap=parseFloat(getComputedStyle(document.documentElement).fontSize);
+    if(infoWrap){
+      infoWrap.style.top=(h+gap)+'px';
+      var adRect=activeIns.getBoundingClientRect();
+      var rightOffset=window.innerWidth-adRect.right;
+      if(rightOffset>gap*2){
+        infoWrap.style.right=rightOffset+'px';
+      }else{
+        infoWrap.style.right='';
+      }
+    }
+  }
+  document.querySelectorAll('.kakao_ad_area').forEach(function(ins){
+    new MutationObserver(function(){
+      applyAdHeight();
     }).observe(ins,{attributes:true,attributeFilter:['style']});
   });
 })();
