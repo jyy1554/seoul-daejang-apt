@@ -380,6 +380,7 @@ const shuffle = a=>[...a].sort(()=>Math.random()-.5);
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  document.querySelector('.info-wrap').style.display=id==='s-quiz'?'none':'';
 }
 
 // ── SVG 지도 클릭 이벤트 ──────────────────────────────
