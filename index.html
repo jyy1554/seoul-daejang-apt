@@ -178,7 +178,7 @@
         wrap.style.height=h+'px';
         document.querySelectorAll('.screen').forEach(function(s){s.style.paddingTop=h+'px';});
         var infoWrap=document.querySelector('.info-wrap');
-        if(infoWrap) infoWrap.style.top=(h+16)+'px';
+        if(infoWrap) infoWrap.style.top=(h+8)+'px';
         ob.disconnect();
       }
     }).observe(ins,{attributes:true,attributeFilter:['style']});
