@@ -37,6 +37,16 @@
     #s-start h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:900;line-height:1.15;margin-bottom:.6rem;}
     #s-start h1 .hl{color:var(--gold);}
     .start-sub{font-size:1rem;color:#999;line-height:1.7;margin-bottom:2.5rem;}
+    .credit{margin-top:1.8rem;font-size:.75rem;color:#555;letter-spacing:.05em;}
+    .info-wrap{position:fixed;top:1rem;right:1rem;z-index:10000;}
+    .btn-info{background:none;border:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:.35;}
+    .btn-info:hover{opacity:.8;}
+    .btn-info svg{width:28px;height:28px;}
+    .info-tooltip{display:none;position:absolute;top:40px;right:0;background:#111;border:1px solid #333;border-radius:12px;padding:1rem 1.2rem;text-align:right;white-space:nowrap;pointer-events:none;}
+    .info-wrap:hover .info-tooltip{display:block;}
+    .info-tooltip p{font-size:.78rem;color:#888;line-height:1.8;margin:0;}
+    .info-tooltip strong{color:#fff;}
+    .info-tooltip a{color:var(--gold);text-decoration:none;pointer-events:auto;}
     .start-sub strong{color:#fff;}
     @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 30px rgba(255,215,0,.3);}50%{transform:scale(1.06);box-shadow:0 0 50px rgba(255,215,0,.6);}}
     .btn-gold{background:var(--gold);color:#000;border:none;border-radius:50px;padding:1rem 3rem;font-size:1.05rem;font-weight:800;cursor:pointer;box-shadow:0 0 30px rgba(255,215,0,.3);animation:pulse 2s ease-in-out infinite;}
@@ -131,6 +141,18 @@
 </head>
 <body>
 
+<!-- ℹ️ 버튼 + 호버 툴팁 -->
+<div class="info-wrap">
+  <div class="btn-info" aria-label="정보">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+      <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+    </svg>
+  </div>
+  <div class="info-tooltip">
+    <p><strong>서울 대장아파트 퀴즈</strong><br>made by Y J<br><a href="mailto:jyy1556@gmail.com">jyy1556@gmail.com</a></p>
+  </div>
+</div>
+
 <style>
 @media(max-width:767px){#ad-desktop{display:none!important;}}
 @media(min-width:768px){#ad-mobile{display:none!important;}}
@@ -155,6 +177,8 @@
         var h=parseInt(ins.dataset.adHeight);
         wrap.style.height=h+'px';
         document.querySelectorAll('.screen').forEach(function(s){s.style.paddingTop=h+'px';});
+        var infoWrap=document.querySelector('.info-wrap');
+        if(infoWrap) infoWrap.style.top=(h+16)+'px';
         ob.disconnect();
       }
     }).observe(ins,{attributes:true,attributeFilter:['style']});
@@ -185,6 +209,7 @@
     <div class="q-slider-ends"><span>0</span><span>20</span></div>
   </div>
   <button class="btn-gold" onclick="startGame()">지식 대결 시작 🏆</button>
+  <p class="credit">made by Y J</p>
 </div>
 
 <!-- ══ 퀴즈 화면 ══ -->
@@ -290,62 +315,61 @@
 // ── 아파트 데이터 ─────────────────────────────────────
 // 사진 파일: images/ 폴더에 "아파트이름.jpg" 로 저장하면 자동 연결
 const APTS = [
-  {name:"반포동 래미안퍼스티지",          gu:"서초구",  units:2444,  year:2009, highlight:"반포 한강변 대표"},
-  {name:"반포동 아크로리버파크",          gu:"서초구",  units:1612,  year:2016, highlight:"반포 한강뷰 최고가"},
-  {name:"반포동 반포자이",               gu:"서초구",  units:3410,  year:2009, highlight:"반포3동 랜드마크"},
-  {name:"반포동 래미안원베일리",          gu:"서초구",  units:2990,  year:2023, highlight:"신반포 재개발 신축"},
-  {name:"개포동 디에이치퍼스티어아이파크", gu:"강남구",  units:6702,  year:2023, highlight:"개포 최대 규모"},
-  {name:"대치동 래미안대치팰리스",        gu:"강남구",  units:1278,  year:2015, highlight:"대치 학군 대장"},
-  {name:"대치동 은마",                   gu:"강남구",  units:4424,  year:1979, highlight:"대치 재건축 대장주"},
-  {name:"도곡동 타워팰리스",             gu:"강남구",  units:1297,  year:2002, highlight:"도곡 초고층 랜드마크"},
-  {name:"압구정동 현대",                 gu:"강남구",  units:1924,  year:1982, highlight:"압구정 재건축 대장주"},
-  {name:"도곡동 도곡렉슬",              gu:"강남구",  units:3002,  year:2006, highlight:"도곡 대치 경계"},
-  {name:"잠실동 잠실엘스",              gu:"송파구",  units:5678,  year:2008, highlight:"잠실 4대 단지"},
-  {name:"잠실동 리센츠",                gu:"송파구",  units:5563,  year:2008, highlight:"잠실 4대 단지"},
-  {name:"가락동 헬리오시티",             gu:"송파구",  units:9510,  year:2018, highlight:"전국 최대 단지"},
-  {name:"신천동 파크리오",              gu:"송파구",  units:6864,  year:2008, highlight:"잠실 올림픽공원 인근"},
-  {name:"성수동1가 트리마제",            gu:"성동구",  units:688,   year:2017, highlight:"성수 한강변 고급"},
-  {name:"성수동1가 아크로서울포레스트",   gu:"성동구",  units:280,   year:2020, highlight:"성수 한강뷰 고급"},
-  {name:"아현동 마포래미안푸르지오",      gu:"마포구",  units:3885,  year:2014, highlight:"마포 대장 뉴타운"},
-  {name:"용강동 e편한세상마포리버파크",   gu:"마포구",  units:547,   year:2016, highlight:"공덕역 초역세권"},
-  {name:"이촌동 이촌르엘",              gu:"용산구",  units:750,   year:2027, highlight:"이촌동 신축 랜드마크"},
-  {name:"이촌동 한강맨션",              gu:"용산구",  units:660,   year:1971, highlight:"이촌동 재건축 기대주"},
-  {name:"고덕동 고덕그라시움",           gu:"강동구",  units:4932,  year:2019, highlight:"강동 랜드마크"},
-  {name:"둔촌동 올림픽파크포레온",       gu:"강동구",  units:12032, year:2024, highlight:"역대 최대 재건축"},
-  {name:"광장동 광장현대3단지",          gu:"광진구",  units:1056,  year:1990, highlight:"한강변 광장동"},
-  {name:"길음동 길음뉴타운8단지래미안",   gu:"성북구",  units:1617,  year:2010, highlight:"길음역 뉴타운 대장"},
-  {name:"남가좌동 DMC파크뷰자이",        gu:"서대문구", units:4300,  year:2015, highlight:"DMC 역세권"},
+  {name:"반포동 래미안퍼스티지",          gu:"서초구",  units:2444,  year:2009, highlight:"반포 한강변 대표", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/25648/MjU2NDgxMDAyMDAwMTcy.jpg"},
+  {name:"반포동 아크로리버파크",          gu:"서초구",  units:1612,  year:2016, highlight:"반포 한강뷰 최고가", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/36008/MzYwMDgxMDAwNTY1OTcy.jpg"},
+  {name:"반포동 반포자이",               gu:"서초구",  units:3410,  year:2009, highlight:"반포3동 랜드마크", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/17727/MTc3MjcxMDAzNzgzOTMx.jpg"},
+  {name:"반포동 래미안원베일리",          gu:"서초구",  units:2990,  year:2023, highlight:"신반포 재개발 신축", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/2622712/20240319/MjAxNDk2N2U3MGFjMTA3Mzcy.jpg"},
+  {name:"개포동 디에이치퍼스티어아이파크", gu:"강남구",  units:6702,  year:2023, highlight:"개포 최대 규모", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/3199984/20240506/NDM2NTg5MWVkOGFlNTU0Mjcy.jpg"},
+  {name:"대치동 래미안대치팰리스",        gu:"강남구",  units:1278,  year:2015, highlight:"대치 학군 대장", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/36277/MzYyNzcxMDAwMjM4OTMx.jpg"},
+  {name:"대치동 은마",                   gu:"강남구",  units:4424,  year:1979, highlight:"대치 재건축 대장주", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/243/MjQzMTAwMDIzOTgzMQ==.jpg"},
+  {name:"도곡동 타워팰리스",             gu:"강남구",  units:1297,  year:2002, highlight:"도곡 초고층 랜드마크", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/233/MjMzMTAwMDM3MjA3Mg==.jpg"},
+  {name:"압구정동 현대",                 gu:"강남구",  units:1924,  year:1982, highlight:"압구정 재건축 대장주", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/134/MTM0MTgwODcy.jpg"},
+  {name:"도곡동 도곡렉슬",              gu:"강남구",  units:3002,  year:2006, highlight:"도곡 대치 경계", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/15503/MTU1MDMxMDAwMjU2ODcy.jpg"},
+  {name:"잠실동 잠실엘스",              gu:"송파구",  units:5678,  year:2008, highlight:"잠실 4대 단지", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/17387/MTczODczNDYyNzI=.jpg"},
+  {name:"잠실동 리센츠",                gu:"송파구",  units:5563,  year:2008, highlight:"잠실 4대 단지", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/17280/MTcyODAzMjk4NzI=.jpg"},
+  {name:"가락동 헬리오시티",             gu:"송파구",  units:9510,  year:2018, highlight:"전국 최대 단지", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/39575/Mzk1NzUxMDA1NDQzMDcy.jpg"},
+  {name:"신천동 파크리오",              gu:"송파구",  units:6864,  year:2008, highlight:"잠실 올림픽공원 인근", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/102245/20210129/ZWI5N2UzODE0OTU2ODVkMTcy.jpg"},
+  {name:"성수동1가 트리마제",            gu:"성동구",  units:688,   year:2017, highlight:"성수 한강변 고급", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/36511/MzY1MTExMDAwMTg4Njcy.jpg"},
+  {name:"성수동1가 아크로서울포레스트",   gu:"성동구",  units:280,   year:2020, highlight:"성수 한강뷰 고급", img:"https://lh3.googleusercontent.com/gps-cs-s/AHRPTWls3wl5EB2FUp4GLcBUXV6JlmB8xvSMoOL6Gls4W2JK5YZtSDIxiLNqIMjNEHmzFlw39R9VKdaje8XVsEarlbVMRt0gPfs5M4B0Ml3nF2hGA0WDy4uxIb97vCiVo0tXl9LoqjtNWx1GUGmq=s1360-w1360-h1020-rw"},
+  {name:"아현동 마포래미안푸르지오",      gu:"마포구",  units:3885,  year:2014, highlight:"마포 대장 뉴타운", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/33288/MzMyODgxMDAwMzQ4NjMx.jpg"},
+  {name:"용강동 e편한세상마포리버파크",   gu:"마포구",  units:547,   year:2016, highlight:"공덕역 초역세권", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/34063/MzQwNjMxMDAxMDE2MTMx.jpg"},
+  {name:"이촌동 이촌르엘",              gu:"용산구",  units:750,   year:2027, highlight:"이촌동 신축 랜드마크", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/lots/build_photo/selothscmno/6028296/NjAyODI5NjMzMDczOTcy.jpg"},
+  {name:"이촌동 한강맨션",              gu:"용산구",  units:660,   year:1971, highlight:"이촌동 재건축 기대주", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/2623/MjYyMzEwMDI5ODA4NzI=.jpg"},
+  {name:"고덕동 고덕그라시움",           gu:"강동구",  units:4932,  year:2019, highlight:"강동 랜드마크", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/695634/20210812/NTMwMjVlOTVlNTM4ZTRlYjMx.jpg"},
+  {name:"둔촌동 올림픽파크포레온",       gu:"강동구",  units:12032, year:2024, highlight:"역대 최대 재건축", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/2502068/20240424/YWU2OTQ3MTBkYWZmNTM4MzMx.jpg"},
+  {name:"광장동 광장현대3단지",          gu:"광진구",  units:1056,  year:1990, highlight:"한강변 광장동", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/858/ODU4MTAwMTMxMzc3Mg==.jpg"},
+  {name:"길음동 길음뉴타운8단지래미안",   gu:"성북구",  units:1617,  year:2010, highlight:"길음역 뉴타운 대장", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/17955/MTc5NTUxMDAyOTcyMjcy.jpg"},
+  {name:"남가좌동 DMC파크뷰자이",        gu:"서대문구", units:4300,  year:2015, highlight:"DMC 역세권", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/35380/MzUzODAxMDAyMDY3NTcy.jpg"},
   // 추가 구
-  {name:"마곡동 마곡엠밸리7단지",        gu:"강서구",  units:1004,  year:2014, highlight:"마곡 복합개발 대표"},
-  {name:"중계동 중계무지개",             gu:"노원구",  units:2433,  year:1991, highlight:"중계동 재건축 기대주"},
-  {name:"창동 창동주공3단지",            gu:"도봉구",  units:2856,  year:1990, highlight:"창동 재건축 대장주"},
-  {name:"면목동 사가정센트럴아이파크",    gu:"중랑구",  units:1505,  year:2020, highlight:"면목동 신축 랜드마크"},
-  {name:"이문동 이문아이파크자이",        gu:"동대문구", units:4321,  year:2025, highlight:"이문 뉴타운 대장"},
-  {name:"홍파동 경희궁자이2단지",        gu:"종로구",  units:1148,  year:2017, highlight:"광화문 인근 대단지"},
-  {name:"신당동 남산타운",              gu:"중구",    units:5152,  year:2002, highlight:"중구 최대 단지"},
-  {name:"흑석동 아크로리버하임",         gu:"동작구",  units:1073,  year:2019, highlight:"흑석뉴타운 대장"},
-  {name:"봉천동 관악푸르지오",          gu:"관악구",  units:2104,  year:2004, highlight:"봉천동 대단지"},
-  {name:"독산동 금천롯데캐슬골드파크1차", gu:"금천구",  units:1743,  year:2016, highlight:"독산동 대표 단지"},
-  {name:"개봉동 현대1단지",             gu:"구로구",  units:2412,  year:2001, highlight:"개봉동 대단지"},
-  {name:"목동 목동신시가지7단지",        gu:"양천구",  units:2550,  year:1986, highlight:"목동 학군 명소"},
-  {name:"여의도동 시범",                gu:"영등포구", units:1584,  year:1971, highlight:"여의도 랜드마크"},
-  {name:"응암동 녹번역e편한세상캐슬",    gu:"은평구",  units:2569,  year:2021, highlight:"은평 신축 대장"},
-  {name:"미아동 SK북한산시티",          gu:"강북구",  units:3830,  year:2004, highlight:"강북 최대 단지"},
-  {name:"한남동 한남더힐",              gu:"용산구",  units:600,   year:2011, highlight:"한국 최고가 아파트 대명사"},
-  {name:"한남동 나인원한남",            gu:"용산구",  units:341,   year:2019, highlight:"한강뷰 초고급 주거"},
-  {name:"개포동 래미안블레스티지",       gu:"강남구",  units:1957,  year:2019, highlight:"개포주공1단지 재건축"},
-  {name:"개포동 디에이치아너힐즈",       gu:"강남구",  units:1320,  year:2019, highlight:"개포주공4단지 재건축"},
-  {name:"잠원동 신반포메이플자이",       gu:"서초구",  units:3307,  year:2020, highlight:"신반포 재건축 대단지"},
-  {name:"반포동 디에이치클래스트",       gu:"서초구",  units:5002,  year:2024, highlight:"신반포 역대 최대 재건축"},
-  {name:"방배동 래미안원페를라",         gu:"서초구",  units:1097,  year:2024, highlight:"방배 6구역 재건축 신축"},
-  {name:"잠실동 잠실트리지움",          gu:"송파구",  units:2696,  year:2008, highlight:"잠실 4대 단지"},
-  {name:"잠실동 잠실주공5단지",         gu:"송파구",  units:3930,  year:1978, highlight:"잠실 재건축 핵심 대장"},
-  {name:"고덕동 래미안힐스테이트",       gu:"강동구",  units:4066,  year:2016, highlight:"고덕 재건축 선도 단지"},
-  {name:"자양동 더샵스타시티",          gu:"광진구",  units:2678,  year:2003, highlight:"광진구 최고가 랜드마크"},
-  {name:"염리동 마포프레스티지자이",     gu:"마포구",  units:3885,  year:2015, highlight:"마포 최대 브랜드 단지"},
-  {name:"목동 목동신시가지1단지",        gu:"양천구",  units:640,   year:1986, highlight:"목동 재건축 선도 단지"},
-  {name:"목동 목동신시가지14단지",       gu:"양천구",  units:2300,  year:1988, highlight:"목동 최대 규모 단지"},
-  {name:"여의도동 브라이튼여의도",       gu:"영등포구", units:879,  year:2024, highlight:"여의도 최신 랜드마크"},
+  {name:"마곡동 마곡엠밸리7단지",        gu:"강서구",  units:1004,  year:2014, highlight:"마곡 복합개발 대표", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/35851/MzU4NTExMDAwODU3Nzcy.jpg"},
+  {name:"중계동 중계무지개",             gu:"노원구",  units:2433,  year:1991, highlight:"중계동 재건축 기대주", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/1178/MTE3ODEwMDAyMjA0NzI=.jpg"},
+  {name:"창동 창동주공3단지",            gu:"도봉구",  units:2856,  year:1990, highlight:"창동 재건축 대장주", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/1355/MTM1NTEwMDA1NTQ5NzI=.jpg"},
+  {name:"면목동 사가정센트럴아이파크",    gu:"중랑구",  units:1505,  year:2020, highlight:"면목동 신축 랜드마크", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/1162847/20220119/ZTk3ODNiMmZlMjQ1ZDJkMjcy.jpg"},
+  {name:"이문동 이문아이파크자이",        gu:"동대문구", units:4321,  year:2025, highlight:"이문 뉴타운 대장", img:"https://i.namu.wiki/i/sgY3BnTsvj794cYzBqc2nizxIOwzFsxHbL_tqBczfzWfxs1mRZjIIJn2o0bb0R5bRMRrbVnxZ6Z61V5puRyTRQ.webp"},
+  {name:"홍파동 경희궁자이2단지",        gu:"종로구",  units:1148,  year:2017, highlight:"광화문 인근 대단지", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/43944/NDM5NDQxMDA0MDA1ODcy.jpg"},
+  {name:"신당동 남산타운",              gu:"중구",    units:5152,  year:2002, highlight:"중구 최대 단지", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/250862/20220225/ZmNiM2UwYWY5NTJjYzNlNjcy.jpg"},
+  {name:"흑석동 아크로리버하임",         gu:"동작구",  units:1073,  year:2019, highlight:"흑석뉴타운 대장", img:"https://lh3.googleusercontent.com/gps-cs-s/AHRPTWlpjSZY4SRrRZmSM3vnIpM7vUsX5fTVJmid7FzIdS7o-CLWB5gYKu3kXnrOAlm9S7y62eJLWTBE9yl874rLh4cGeSoS6CqQ7LNBe18kGyiIfdvxsrIbELiez67i4B3eC_rADCn1=s1360-w1360-h1020-rw"},
+  {name:"봉천동 관악푸르지오",          gu:"관악구",  units:2104,  year:2004, highlight:"봉천동 대단지", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/13834/MTM4MzQxMDAxMjI4Mzcy.jpg"},
+  {name:"독산동 금천롯데캐슬골드파크1차", gu:"금천구",  units:1743,  year:2016, highlight:"독산동 대표 단지", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/36295/MzYyOTUxMDAwMTYzNjcy.jpg"},
+  {name:"목동 목동신시가지7단지",        gu:"양천구",  units:2550,  year:1986, highlight:"목동 학군 명소", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/2298/MjI5ODM5NjI3Mg==.jpg"},
+  {name:"여의도동 시범",                gu:"영등포구", units:1584,  year:1971, highlight:"여의도 랜드마크", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/2467/MjQ2NzEwMDMzMjc3NzI=.jpg"},
+  {name:"응암동 녹번역e편한세상캐슬",    gu:"은평구",  units:2569,  year:2021, highlight:"은평 신축 대장", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/2502068/20240407/N2QxYzYzZjI5ZmFkNDhmMTcy.jpg"},
+  {name:"미아동 SK북한산시티",          gu:"강북구",  units:3830,  year:2004, highlight:"강북 최대 단지", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/508/NTA4MTAwMDIyODM3Mg==.jpg"},
+  {name:"한남동 한남더힐",              gu:"용산구",  units:600,   year:2011, highlight:"한국 최고가 아파트 대명사", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/1407731/20220120/NDBhZjkyYWNiMzlmNmU1Nzcy.jpg"},
+  {name:"한남동 나인원한남",            gu:"용산구",  units:341,   year:2019, highlight:"한강뷰 초고급 주거", img:"https://lh3.googleusercontent.com/gps-cs-s/AHRPTWm4NlMiYGWujvPNlm48sM0ZoaG8SvJMzp31BU_E49VQpQjo-hT4iptRopifpLU2-Xq7mzfdXZntaw8AXhxsk8ZDuirhfqQNg1Jnt2R0Q42QvgLU_LrH1BvHA4qvnHUjxmE3jkgCbQ=s1360-w1360-h1020-rw"},
+  {name:"개포동 래미안블레스티지",       gu:"강남구",  units:1957,  year:2019, highlight:"개포주공1단지 재건축", img:"https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmlbBXIR5u6G03SxRjmKx-OJcpdIl5ESzsOa1pRC8Diyt160ELHPf2ifkkIwovD6mymGO0wpLWeoOIXRgVZvt4zhhk9cxITvIgS-syb1erVcdXq8HQj6JdenEx9aQbV0s__KtLf=s1360-w1360-h1020-rw"},
+  {name:"개포동 디에이치아너힐즈",       gu:"강남구",  units:1320,  year:2019, highlight:"개포주공4단지 재건축", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/103952/20210130/MWY0ZWQ5ZDBhYzIyNWVhZjcy.jpg"},
+  {name:"잠원동 신반포메이플자이",       gu:"서초구",  units:3307,  year:2020, highlight:"신반포 재건축 대단지", img:"https://pimg.mk.co.kr/news/cms/202312/28/news-p.v1.20231221.7e54c90bf97e43cc9f4aad0fcdca7adb_P1.jpg"},
+  {name:"반포동 디에이치클래스트",       gu:"서초구",  units:5002,  year:2024, highlight:"신반포 역대 최대 재건축", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/lots/build_photo/selothscmno/6027849/NjAyNzg0OTMzMDA1ODcy.jpg"},
+  {name:"방배동 래미안원페를라",         gu:"서초구",  units:1097,  year:2024, highlight:"방배 6구역 재건축 신축", img:"https://img1.yna.co.kr/photo/cms/2024/08/09/50/PCM20240809000050003_P4.jpg"},
+  {name:"잠실동 잠실트리지움",          gu:"송파구",  units:2696,  year:2008, highlight:"잠실 4대 단지", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/2502068/20231124/ZGQ2OWI3YTdmMGI0NzE3MTcy.jpg"},
+  {name:"잠실동 잠실주공5단지",         gu:"송파구",  units:3930,  year:1978, highlight:"잠실 재건축 핵심 대장", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/2276/MjI3NjM3NDU3Mg==.jpg"},
+  {name:"고덕동 래미안힐스테이트",       gu:"강동구",  units:4066,  year:2016, highlight:"고덕 재건축 선도 단지", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/36561/MzY1NjExMDAwMzA2NDcy.jpg"},
+  {name:"자양동 더샵스타시티",          gu:"광진구",  units:2678,  year:2003, highlight:"광진구 최고가 랜드마크", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/16381/MTYzODExMDAyNzIxNzcy.jpg"},
+  {name:"염리동 마포프레스티지자이",     gu:"마포구",  units:3885,  year:2015, highlight:"마포 최대 브랜드 단지", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/413085/20210531/YTNiNjc0MWRiOGExNzkwODcy.jpg"},
+  {name:"목동 목동신시가지1단지",        gu:"양천구",  units:640,   year:1986, highlight:"목동 재건축 선도 단지", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/44318/NDQzMTgxMDAyNjc2MTcy.jpg"},
+  {name:"목동 목동신시가지14단지",       gu:"양천구",  units:2300,  year:1988, highlight:"목동 최대 규모 단지", img:"https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/2362/MjM2MjEwMDQ1NDc3NzI=.jpg"},
+  {name:"여의도동 브라이튼여의도",       gu:"영등포구", units:879,  year:2024, highlight:"여의도 최신 랜드마크", img:"https://file.kbland.kr/image/kbstar/land/img/revw/userseq/2622712/20231213/NWRmODM5YTBkY2FiZWU0Mzcy.jpg"},
 ];
 
 let TOTAL=10;
@@ -385,9 +409,10 @@ function applyMapResult(sel,correct){
 // ── 사진 로딩 ─────────────────────────────────────────
 function setImage(name){
   const wrap=document.getElementById('apt-img-wrap');
-  // images/아파트이름.jpg 파일을 시도. 없으면 placeholder
+  const apt=APTS.find(a=>a.name===name);
+  const src=apt&&apt.img ? apt.img : `images/${encodeURIComponent(name)}.jpg`;
   const img=document.createElement('img');
-  img.src=`images/${encodeURIComponent(name)}.jpg`;
+  img.src=src;
   img.alt=name;
   img.onerror=()=>{
     wrap.innerHTML=`
@@ -511,7 +536,7 @@ function showResult(){
 
 function shareResult(){
   const correct=log.filter(r=>r.ok).length;
-  const text=`서울 대장아파트 지식테스트\n${correct}/${TOTAL} 정답 · 총 ${score}점\n🏠 나도 해봐! → playatgame.com`;
+  const text=`서울 대장아파트 지식테스트\n${correct}/${TOTAL} 정답\n🏠 나도 해봐! → playatgame.com/seoul-apt/`;
   navigator.clipboard.writeText(text)
     .then(()=>alert('결과가 복사됐어요! SNS에 붙여넣기 해보세요.'))
     .catch(()=>alert(text));
