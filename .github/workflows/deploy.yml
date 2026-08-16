@@ -22,6 +22,7 @@ jobs:
           git checkout gh-pages
           mkdir -p seoul-apt
           cp ../index.html seoul-apt/index.html
-          git add seoul-apt/index.html
+          cp ../og-image.png seoul-apt/og-image.png
+          git add seoul-apt/index.html seoul-apt/og-image.png
           git diff --staged --quiet || git commit -m "Update seoul-apt quiz"
           git push
